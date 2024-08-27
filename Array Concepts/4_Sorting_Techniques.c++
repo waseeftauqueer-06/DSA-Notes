@@ -132,7 +132,83 @@ void insertion_sort(int arr[], int n) {
     cout << "\n";
 }
 
+//TC : O(N log N)
+//Recursively divides the array into halves, sorts each half, and then merges the sorted halves.
+void merge(int arr[], int l, int m, int r) {
+    vector<int> temp;
+    int low = l;
+    int high = m + 1;
 
+    while (low <= m && high <= r) {
+        if (arr[low] <= arr[high]) {
+            temp.push_back(arr[low]);
+            low++;
+        } else {
+            temp.push_back(arr[high]);
+            high++;
+        }
+    }
+
+    while (low <= m) {
+        temp.push_back(arr[low]);
+        low++;
+    }
+
+    while (high <= r) {
+        temp.push_back(arr[high]);
+        high++;
+    }
+
+    for (int i = l; i <= r; i++) {
+        arr[i] = temp[i - l];
+    }
+}
+
+// Function for Merge Sort
+void merge_sort(int arr[], int l, int r) {
+    if (l < r) {
+        int mid = l + (r - l) / 2;
+        merge_sort(arr, l, mid);
+        merge_sort(arr, mid + 1, r);
+        merge(arr, l, mid, r);
+    }
+}
+
+//Recursively sorts the array by partitioning it and sorting the subarrays around the pivot.
+//TC : O(N log N)
+// Function to perform Quick Sort
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int partIndex = partition(arr, low, high);
+        quickSort(arr, low, partIndex - 1);  // Recursively sort the left part
+        quickSort(arr, partIndex + 1, high); // Recursively sort the right part
+    }
+}
+
+// Function to partition the array
+int partition(int arr[], int low, int high) {
+    int pivot = arr[low];  // Choosing the first element as pivot
+    int i = low;
+    int j = high;
+    
+    while (i < j) {
+        // Move the `i` index to the right if the element is less than or equal to the pivot
+        while (arr[i] <= pivot && i <= high - 1) {
+            i++;
+        }
+        // Move the `j` index to the left if the element is greater than the pivot
+        while (arr[j] > pivot && j >= low + 1) {
+            j--;
+        }
+        // Swap elements if `i` is less than `j`
+        if (i < j) {
+            swap(arr[i], arr[j]);
+        }
+    }
+    // Swap the pivot element with the element at `j` to place the pivot in its correct position
+    swap(arr[low], arr[j]);
+    return j; // Return the partition index
+}
 
 int main() {
   int arr[] = {13,46,24,52,20,9};
