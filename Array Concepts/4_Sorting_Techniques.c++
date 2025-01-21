@@ -133,6 +133,59 @@ void insertion_sort(int arr[], int n) {
 }
 
 
+/* Quicksort is a divide-and-conquer algorithm. It works by selecting a pivot element, 
+   partitioning the array around the pivot such that elements less than the pivot 
+   go to its left and elements greater than the pivot go to its right, and 
+   then recursively applying the same logic to the left and right subarrays.
+
+   https://takeuforward.org/sorting/quick-sort-algorithm/
+
+   TC: O(n log n) on average, O(n^2) in the worst case (when the pivot is poorly chosen).
+   SC: O(log n) for the recursion stack.
+
+   Partitioning process:
+   - Choose the last element as the pivot.
+   - Rearrange the array so that elements <= pivot are to the left, and elements > pivot are to the right.
+   - Return the pivot's final position after partitioning.
+
+   Example:
+   Array: {13, 46, 24, 52, 20, 9}
+   Pivot: 9 (last element)
+
+   Partition:
+   - Start with i = -1.
+   - Traverse j from 0 to n-2.
+   - Swap arr[j] with arr[i+1] if arr[j] <= pivot.
+   - After the loop, swap the pivot with arr[i+1] to place it in its correct position.
+*/
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; // Choose the last element as the pivot
+    int i = low - 1;       // Index for the smaller element
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]); // Swap elements smaller than pivot
+        }
+    }
+    swap(arr[i + 1], arr[high]); // Place pivot in its correct position
+    return i + 1;                // Return the pivot's final position
+}
+
+/* Recursive quicksort function:
+   - Partition the array to find the pivot's position.
+   - Recursively apply quicksort to the left and right subarrays around the pivot.
+*/
+
+void quick_sort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high); // Partition index
+        quick_sort(arr, low, pi - 1);       // Sort the left subarray
+        quick_sort(arr, pi + 1, high);      // Sort the right subarray
+    }
+}
+
 
 int main() {
   int arr[] = {13,46,24,52,20,9};
