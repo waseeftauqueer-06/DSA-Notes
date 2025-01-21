@@ -133,6 +133,98 @@ void insertion_sort(int arr[], int n) {
 }
 
 
+/* Merge Sort is a divide-and-conquer sorting algorithm that recursively divides an array
+   into two halves, sorts each half, and then merges the sorted halves back together.
+
+   https://takeuforward.org/sorting/merge-sort-algorithm/
+
+   TC: O(n log n)
+*/
+
+// Function to merge two halves
+void merge(int arr[], int l, int m, int r) {
+    vector<int> temp;
+    int low = l;
+    int high = m + 1;
+
+    // Merging the two sorted halves
+    while (low <= m && high <= r) {
+        if (arr[low] <= arr[high]) {
+            temp.push_back(arr[low]);
+            low++;
+        } else {
+            temp.push_back(arr[high]);
+            high++;
+        }
+    }
+
+    // Copy the remaining elements of the first half, if any
+    while (low <= m) {
+        temp.push_back(arr[low]);
+        low++;
+    }
+
+    // Copy the remaining elements of the second half, if any
+    while (high <= r) {
+        temp.push_back(arr[high]);
+        high++;
+    }
+
+    // Copy the merged elements back into the original array
+    for (int i = l; i <= r; i++) {
+        arr[i] = temp[i - l];
+    }
+}
+
+// Merge Sort function
+void merge_sort(int arr[], int l, int r) {
+    if (l >= r) return;
+
+    int mid = l + (r - l) / 2;
+    merge_sort(arr, l, mid);
+    merge_sort(arr, mid + 1, r);
+    merge(arr, l, mid, r);
+}
+
+
+/* Quick Sort is a divide-and-conquer algorithm that picks a pivot element, partitions the array
+   around the pivot, and then recursively sorts the sub-arrays on each side of the pivot.
+
+   TC : O(NlogN)
+
+   https://takeuforward.org/data-structure/quick-sort-algorithm/
+*/
+
+// Function to partition the array and return the pivot index
+int partition(int arr[], int low, int high) {
+    int pivot = arr[low];
+    int i = low;
+    int j = high;
+
+    while (i < j) {
+        while (arr[i] <= pivot && i < high) {
+            i++;
+        }
+        while (arr[j] > pivot && j > low) {
+            j--;
+        }
+        if (i < j) {
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[low], arr[j]);
+    return j;
+}
+
+// Quick Sort function
+void quick_sort(int arr[], int low, int high) {
+    if (low < high) {
+        int partIndex = partition(arr, low, high);
+        quick_sort(arr, low, partIndex - 1);  // Sort the left part
+        quick_sort(arr, partIndex + 1, high); // Sort the right part
+    }
+}
+
 
 int main() {
   int arr[] = {13,46,24,52,20,9};
@@ -142,6 +234,10 @@ int main() {
     cout << arr[i] << " ";
   }
   cout << "\n";
-  bubble_sort(arr, n);
+    //selection_sort(arr, n);
+    // bubble_sort(arr, n);
+    // insertion_sort(arr, n);
+    // merge_sort(arr, 0, n - 1);
+    quick_sort(arr, 0, n - 1);
   return 0;
 }
